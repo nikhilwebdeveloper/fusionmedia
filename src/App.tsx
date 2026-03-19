@@ -36,7 +36,12 @@ const Navbar = () => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-brand-dark/80 backdrop-blur-md py-4 shadow-xl' : 'bg-transparent py-6'}`}>
       <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-brand-primary rounded-lg flex items-center justify-center font-black text-brand-dark text-2xl">F</div>
+          <img 
+            src="https://lh3.googleusercontent.com/d/1P4npnJEsEdOa9WHxj4bsyN6BTjf-es-F" 
+            alt="Fusion Media Logo" 
+            className="w-10 h-10 object-contain"
+            referrerPolicy="no-referrer"
+          />
           <span className="text-2xl font-bold tracking-tighter">FUSION <span className="text-brand-primary">MEDIA</span></span>
         </div>
 
@@ -335,7 +340,12 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex flex-col items-center md:items-start gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-brand-primary rounded flex items-center justify-center font-black text-brand-dark">F</div>
+            <img 
+              src="https://lh3.googleusercontent.com/d/1P4npnJEsEdOa9WHxj4bsyN6BTjf-es-F" 
+              alt="Fusion Media Logo" 
+              className="w-8 h-8 object-contain"
+              referrerPolicy="no-referrer"
+            />
             <span className="text-xl font-bold tracking-tighter">FUSION MEDIA</span>
           </div>
           <p className="text-sm text-gray-500 max-w-xs text-center md:text-left">
