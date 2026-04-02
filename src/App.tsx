@@ -22,9 +22,22 @@ import {
   Sparkles
 } from 'lucide-react';
 
+import { 
+  BrowserRouter as Router, 
+  Routes, 
+  Route, 
+  Link, 
+  useLocation,
+  useNavigate
+} from 'react-router-dom';
+import TermsAndConditions from './pages/TermsAndConditions';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -32,35 +45,33 @@ const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    if (location.pathname !== '/') {
+      e.preventDefault();
+      navigate('/' + id);
+    }
+  };
+
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-brand-dark/80 backdrop-blur-md py-4 shadow-xl' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
-        <div className="flex items-center gap-2">
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
+        <Link to="/" className="flex flex-col items-center gap-0 absolute left-1/2 -translate-x-1/2 z-10">
           <img 
             src="https://lh3.googleusercontent.com/d/1P4npnJEsEdOa9WHxj4bsyN6BTjf-es-F" 
             alt="Fusion Media Logo" 
-            className="w-10 h-10 object-contain"
+            className="w-8 h-8 object-contain"
             referrerPolicy="no-referrer"
           />
-          <span className="text-2xl font-bold tracking-tighter">FUSION <span className="text-brand-primary">MEDIA</span></span>
-        </div>
+          <span className="text-lg md:text-xl font-bold tracking-tighter leading-none whitespace-nowrap">FUSION <span className="text-brand-primary">MEDIA</span></span>
+        </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          <a href="#services" className="hover:text-brand-primary transition-colors">Services</a>
-          <a href="#creators" className="hover:text-brand-primary transition-colors">For Creators</a>
-          <a href="#contact" className="hover:text-brand-primary transition-colors">For Brands</a>
-          <a 
-            href="https://www.instagram.com/fusionmedia.services" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:text-brand-primary transition-colors"
-          >
-            <Instagram size={18} />
-            <span>@fusionmedia.services</span>
-          </a>
+        <div className="hidden md:flex items-center gap-8 ml-auto">
+          <a href="/#services" onClick={(e) => handleNavClick(e, '#services')} className="hover:text-brand-primary transition-colors">Services</a>
+          <a href="/#creators" onClick={(e) => handleNavClick(e, '#creators')} className="hover:text-brand-primary transition-colors">For Creators</a>
+          <a href="/#contact" onClick={(e) => handleNavClick(e, '#contact')} className="hover:text-brand-primary transition-colors">For Brands</a>
           <button 
-            onClick={() => window.location.href = 'mailto:mediafusion238@gmail.com'}
+            onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
             className="btn-primary py-2 px-6"
           >
             Contact Us
@@ -68,7 +79,7 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-white" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        <button className="md:hidden text-white ml-auto" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
           {isMobileMenuOpen ? <X /> : <Menu />}
         </button>
       </div>
@@ -80,9 +91,9 @@ const Navbar = () => {
           animate={{ opacity: 1, y: 0 }}
           className="md:hidden absolute top-full left-0 right-0 bg-brand-dark border-b border-white/10 p-6 flex flex-col gap-4"
         >
-          <a href="#services" onClick={() => setIsMobileMenuOpen(false)}>Services</a>
-          <a href="#creators" onClick={() => setIsMobileMenuOpen(false)}>For Creators</a>
-          <a href="#contact" onClick={() => setIsMobileMenuOpen(false)}>For Brands</a>
+          <a href="/#services" onClick={(e) => { handleNavClick(e, '#services'); setIsMobileMenuOpen(false); }}>Services</a>
+          <a href="/#creators" onClick={(e) => { handleNavClick(e, '#creators'); setIsMobileMenuOpen(false); }}>For Creators</a>
+          <a href="/#contact" onClick={(e) => { handleNavClick(e, '#contact'); setIsMobileMenuOpen(false); }}>For Brands</a>
           <a 
             href="https://www.instagram.com/fusionmedia.services" 
             target="_blank" 
@@ -93,7 +104,7 @@ const Navbar = () => {
             <span>Instagram</span>
           </a>
           <button 
-            onClick={() => window.location.href = 'mailto:mediafusion238@gmail.com'}
+            onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
             className="btn-primary w-full"
           >
             Email Us
@@ -138,7 +149,7 @@ const Hero = () => {
               Join as a Creator <ArrowRight size={18} />
             </button>
             <button 
-              onClick={() => window.location.href = 'mailto:mediafusion238@gmail.com'}
+              onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
               className="btn-outline flex items-center justify-center gap-2"
             >
               Brand Inquiry <Mail size={18} />
@@ -320,10 +331,10 @@ const Contact = () => {
           <div className="w-20 h-20 bg-brand-primary/20 rounded-full flex items-center justify-center text-brand-primary mb-6">
             <Mail size={40} />
           </div>
-          <div className="text-2xl font-bold mb-2">mediafusion238@gmail.com</div>
+          <div className="text-2xl font-bold mb-2">Connect@fusionmediaofficial.co.in</div>
           <p className="text-gray-400 mb-8">Our team typically responds within 24 hours.</p>
           <button 
-            onClick={() => window.location.href = 'mailto:mediafusion238@gmail.com'}
+            onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
             className="btn-primary flex items-center gap-2 px-12"
           >
             Send an Email <ArrowRight size={18} />
@@ -339,7 +350,7 @@ const Footer = () => {
     <footer className="py-12 border-t border-white/10">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex flex-col items-center md:items-start gap-4">
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <img 
               src="https://lh3.googleusercontent.com/d/1P4npnJEsEdOa9WHxj4bsyN6BTjf-es-F" 
               alt="Fusion Media Logo" 
@@ -347,17 +358,19 @@ const Footer = () => {
               referrerPolicy="no-referrer"
             />
             <span className="text-xl font-bold tracking-tighter">FUSION MEDIA</span>
-          </div>
+          </Link>
           <p className="text-sm text-gray-500 max-w-xs text-center md:text-left">
             Empowering the next generation of creators. Fresh ideas, authentic connections.
           </p>
         </div>
         
         <div className="flex flex-col items-center md:items-end gap-6">
-          <div className="flex gap-8 text-sm text-gray-400">
-            <a href="#services" className="hover:text-brand-primary">Services</a>
-            <a href="#creators" className="hover:text-brand-primary">Creators</a>
-            <a href="#contact" className="hover:text-brand-primary">Brands</a>
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-4 text-sm text-gray-400">
+            <a href="/#services" className="hover:text-brand-primary">Services</a>
+            <a href="/#creators" className="hover:text-brand-primary">Creators</a>
+            <a href="/#contact" className="hover:text-brand-primary">Brands</a>
+            <Link to="/terms" className="hover:text-brand-primary">Terms & Conditions</Link>
+            <Link to="/privacy" className="hover:text-brand-primary">Privacy Policy</Link>
           </div>
 
           <div className="flex gap-4">
@@ -378,7 +391,7 @@ const Footer = () => {
           </div>
           
           <div className="text-sm text-gray-500">
-            mediafusion238@gmail.com
+            Connect@fusionmediaofficial.co.in
           </div>
         </div>
       </div>
@@ -389,15 +402,29 @@ const Footer = () => {
   );
 };
 
-export default function App() {
+const Home = () => {
   return (
-    <div className="min-h-screen selection:bg-brand-primary selection:text-brand-dark">
-      <Navbar />
+    <>
       <Hero />
       <Services />
       <CreatorOnboarding />
       <Contact />
-      <Footer />
-    </div>
+    </>
+  );
+};
+
+export default function App() {
+  return (
+    <Router>
+      <div className="min-h-screen selection:bg-brand-primary selection:text-brand-dark">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/terms" element={<TermsAndConditions />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
 }
