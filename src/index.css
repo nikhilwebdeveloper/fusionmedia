@@ -1,27 +1,75 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-dark: #0B1120;
+  --color-brand-dark: #0A0F1D;
   --color-brand-primary: #5BC4A8;
   --color-brand-secondary: #FFFFFF;
+  --color-brand-accent: #3B82F6;
   
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 @layer base {
   body {
-    @apply bg-brand-dark text-white font-sans antialiased;
+    @apply bg-brand-dark text-white font-sans antialiased selection:bg-brand-primary selection:text-brand-dark;
   }
 }
 
+/* Premium Custom Utilities */
 .glass-card {
-  @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl;
+  @apply bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl;
 }
 
 .btn-primary {
-  @apply bg-brand-primary text-brand-dark font-bold py-3 px-8 rounded-full hover:opacity-90 transition-all duration-300 shadow-lg shadow-brand-primary/20;
+  @apply relative overflow-hidden bg-brand-primary text-brand-dark font-bold py-3.5 px-8 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 shadow-lg shadow-brand-primary/20 cursor-pointer flex items-center justify-center gap-2;
 }
 
 .btn-outline {
-  @apply border-2 border-brand-primary text-brand-primary font-bold py-3 px-8 rounded-full hover:bg-brand-primary hover:text-brand-dark transition-all duration-300;
+  @apply relative overflow-hidden border border-white/20 hover:border-brand-primary text-white hover:text-brand-dark hover:bg-brand-primary font-bold py-3.5 px-8 rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2;
 }
+
+/* Professional Grid Backgrounds */
+.grid-pattern {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+.glow-gradient {
+  background: radial-gradient(circle at 50% 50%, rgba(91, 196, 168, 0.15) 0%, transparent 60%);
+}
+
+.text-gradient {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-brand-primary;
+}
+
+/* 3D Perspective and Hologram card animations */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.holo-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(125deg, transparent 35%, rgba(255, 255, 255, 0.05) 45%, rgba(91, 196, 168, 0.1) 50%, rgba(59, 130, 246, 0.05) 55%, transparent 65%);
+  background-size: 250% 250%;
+  background-position: 0% 0%;
+  transition: background-position 0.6s ease;
+  pointer-events: none;
+}
+
+.holo-card:hover::after {
+  background-position: 100% 100%;
+}
+

@@ -4,12 +4,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   Users, 
   TrendingUp, 
   BarChart3, 
-  Zap, 
   ChevronRight, 
   Instagram, 
   Twitter, 
@@ -18,8 +17,13 @@ import {
   X,
   ArrowRight,
   Mail,
-  ExternalLink,
-  Sparkles
+  Sparkles,
+  ChevronDown,
+  Compass,
+  CheckCircle,
+  Video,
+  Globe,
+  Award
 } from 'lucide-react';
 
 import { 
@@ -48,255 +52,240 @@ const Navbar = () => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     if (location.pathname !== '/') {
       e.preventDefault();
-      navigate('/' + id);
+      navigate('/');
+      // Wait for navigation before scrolling
+      setTimeout(() => {
+        const el = document.getElementById(id.replace('#', ''));
+        el?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+    } else {
+      e.preventDefault();
+      const el = document.getElementById(id.replace('#', ''));
+      el?.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-brand-dark/80 backdrop-blur-md py-4 shadow-xl border-b border-white/5' : 'bg-transparent py-6'}`}>
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center relative">
-        <motion.div 
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.98 }}
-          className="absolute left-1/2 -translate-x-1/2 z-10"
-        >
-          <Link to="/" className="flex flex-col items-center gap-0">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${isScrolled ? 'bg-[#0A0F1D]/90 backdrop-blur-md py-4 border-b border-white/5' : 'bg-transparent py-6'}`}>
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
+        <Link to="/" className="flex items-center gap-3">
+          <div className="relative flex items-center justify-center">
             <img 
               src="https://lh3.googleusercontent.com/d/1P4npnJEsEdOa9WHxj4bsyN6BTjf-es-F" 
               alt="Fusion Media Logo" 
               className="w-8 h-8 object-contain"
               referrerPolicy="no-referrer"
             />
-            <span className="text-lg md:text-xl font-bold tracking-tighter leading-none whitespace-nowrap">FUSION <span className="text-brand-primary">MEDIA</span></span>
-          </Link>
-        </motion.div>
+          </div>
+          <span className="text-lg font-black tracking-wider uppercase">
+            FUSION<span className="text-brand-primary font-medium">MEDIA</span>
+          </span>
+        </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8 ml-auto">
-          <motion.a 
-            whileHover={{ y: -2, textShadow: "0 0 8px rgba(91,196,168,0.4)" }}
-            whileTap={{ scale: 0.95 }}
+        <div className="hidden md:flex items-center gap-8">
+          <a 
             href="/#services" 
             onClick={(e) => handleNavClick(e, '#services')} 
-            className="hover:text-brand-primary transition-colors cursor-pointer text-sm font-medium"
+            className="text-gray-300 hover:text-brand-primary transition-colors cursor-pointer text-sm font-semibold tracking-wide"
           >
             Services
-          </motion.a>
-          <motion.a 
-            whileHover={{ y: -2, textShadow: "0 0 8px rgba(91,196,168,0.4)" }}
-            whileTap={{ scale: 0.95 }}
+          </a>
+          <a 
             href="/#creators" 
             onClick={(e) => handleNavClick(e, '#creators')} 
-            className="hover:text-brand-primary transition-colors cursor-pointer text-sm font-medium"
+            className="text-gray-300 hover:text-brand-primary transition-colors cursor-pointer text-sm font-semibold tracking-wide"
           >
             For Creators
-          </motion.a>
-          <motion.a 
-            whileHover={{ y: -2, textShadow: "0 0 8px rgba(91,196,168,0.4)" }}
-            whileTap={{ scale: 0.95 }}
+          </a>
+          <a 
             href="/#contact" 
             onClick={(e) => handleNavClick(e, '#contact')} 
-            className="hover:text-brand-primary transition-colors cursor-pointer text-sm font-medium"
+            className="text-gray-300 hover:text-brand-primary transition-colors cursor-pointer text-sm font-semibold tracking-wide"
           >
             For Brands
-          </motion.a>
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          </a>
+          <button 
             onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
-            className="btn-primary py-2 px-6 text-sm cursor-pointer"
+            className="btn-primary py-2 px-6 text-xs uppercase tracking-wider font-bold"
           >
             Contact Us
-          </motion.button>
+          </button>
         </div>
 
         {/* Mobile Toggle */}
-        <button className="md:hidden text-white ml-auto cursor-pointer" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X /> : <Menu />}
+        <button className="md:hidden text-white cursor-pointer p-2" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden absolute top-full left-0 right-0 bg-brand-dark border-b border-white/10 p-6 flex flex-col gap-4"
-        >
-          <a href="/#services" onClick={(e) => { handleNavClick(e, '#services'); setIsMobileMenuOpen(false); }}>Services</a>
-          <a href="/#creators" onClick={(e) => { handleNavClick(e, '#creators'); setIsMobileMenuOpen(false); }}>For Creators</a>
-          <a href="/#contact" onClick={(e) => { handleNavClick(e, '#contact'); setIsMobileMenuOpen(false); }}>For Brands</a>
-          <a 
-            href="https://www.instagram.com/fusionmedia.services" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center gap-2"
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-[#0A0F1D] border-b border-white/10 overflow-hidden"
           >
-            <Instagram size={18} />
-            <span>Instagram</span>
-          </a>
-          <button 
-            onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
-            className="btn-primary w-full"
-          >
-            Email Us
-          </button>
-        </motion.div>
-      )}
+            <div className="px-6 py-6 flex flex-col gap-5">
+              <a href="/#services" onClick={(e) => { handleNavClick(e, '#services'); setIsMobileMenuOpen(false); }} className="text-gray-200 text-lg font-medium border-b border-white/5 pb-2">Services</a>
+              <a href="/#creators" onClick={(e) => { handleNavClick(e, '#creators'); setIsMobileMenuOpen(false); }} className="text-gray-200 text-lg font-medium border-b border-white/5 pb-2">For Creators</a>
+              <a href="/#contact" onClick={(e) => { handleNavClick(e, '#contact'); setIsMobileMenuOpen(false); }} className="text-gray-200 text-lg font-medium border-b border-white/5 pb-2">For Brands</a>
+              <a 
+                href="https://www.instagram.com/fusionmedia.services" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-brand-primary py-1"
+              >
+                <Instagram size={18} />
+                <span className="font-bold">Follow @fusionmedia.services</span>
+              </a>
+              <button 
+                onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
+                className="btn-primary w-full mt-2"
+              >
+                Email Us Now
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
 
 const Hero = () => {
-  const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 180]);
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.12,
-        delayChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { type: "spring", stiffness: 100, damping: 20 }
-    }
-  };
-
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
-      {/* Background Elements */}
-      <div className="absolute top-1/4 -right-20 w-96 h-96 bg-brand-primary/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-1/4 -left-20 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+    <section className="relative min-h-screen flex items-center pt-32 pb-24 grid-pattern overflow-hidden">
+      {/* Premium subtle glow accents */}
+      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-brand-primary/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-10 left-1/4 w-[400px] h-[400px] bg-brand-primary/5 rounded-full blur-3xl pointer-events-none" />
       
-      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center relative z-10">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="flex flex-col items-start"
-        >
+      <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 items-center relative z-10 w-full">
+        {/* Value Proposition Column */}
+        <div className="lg:col-span-7 flex flex-col items-start text-left">
           <motion.div 
-            variants={itemVariants}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-brand-primary text-sm font-medium mb-6"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs font-bold uppercase tracking-wider mb-6"
           >
-            <Sparkles size={16} />
-            <span>A Fresh, Hungry & Creative Agency</span>
+            <Sparkles size={14} />
+            <span>Empowering India's Next Generation Creators</span>
           </motion.div>
+          
           <motion.h1 
-            variants={itemVariants}
-            className="text-5xl md:text-7xl font-bold leading-tight mb-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6"
           >
-            The New Era of <span className="text-brand-primary">Influencer</span> Growth.
+            The New Era of <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary via-[#7BE5C8] to-[#4ade80] font-black">
+              Influencer
+            </span> Partnerships.
           </motion.h1>
+
           <motion.p 
-            variants={itemVariants}
-            className="text-xl text-gray-400 mb-10 max-w-lg"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-lg text-gray-300 mb-8 max-w-xl leading-relaxed"
           >
-            Fusion Media is a rising force in the creator economy. We are a new-age agency focused on building authentic connections between brands and the next generation of creators.
+            We connect forward-thinking brands with authentic creators to launch high-impact digital campaigns. Our focus is on high-quality content execution, professional representation, and structured delivery.
           </motion.p>
+
           <motion.div 
-            variants={itemVariants}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto"
           >
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => document.getElementById('creators')?.scrollIntoView({ behavior: 'smooth' })}
-              className="btn-primary flex items-center justify-center gap-2 cursor-pointer"
+            <button 
+              onClick={() => {
+                const el = document.getElementById('creators');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="btn-primary flex items-center justify-center gap-3 py-4 text-sm font-bold"
             >
-              Join as a Creator <ArrowRight size={18} />
-            </motion.button>
-            <motion.button 
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
-              className="btn-outline flex items-center justify-center gap-2 cursor-pointer"
+              <span>Join as a Creator</span>
+              <ArrowRight size={18} />
+            </button>
+            <button 
+              onClick={() => {
+                const el = document.getElementById('contact');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="btn-outline flex items-center justify-center gap-3 py-4 text-sm font-bold"
             >
-              Brand Inquiry <Mail size={18} />
-            </motion.button>
+              <span>Brand Collaboration</span>
+              <Mail size={18} />
+            </button>
           </motion.div>
-          
-          <motion.div 
-            variants={itemVariants}
-            className="mt-12 flex items-center gap-4"
-          >
-            <a 
-              href="https://www.instagram.com/fusionmedia.services" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 glass-card px-6 py-3 hover:border-brand-primary/50 transition-all hover:scale-103 duration-300"
-            >
-              <Instagram className="text-brand-primary" size={24} />
-              <div>
-                <div className="text-xs text-gray-500 uppercase font-mono">Follow our journey</div>
-                <div className="font-bold">@fusionmedia.services</div>
-              </div>
-              <ExternalLink size={14} className="text-gray-600 ml-2" />
-            </a>
-          </motion.div>
-        </motion.div>
+        </div>
 
-        <motion.div
-          style={{ y: y1 }}
-          initial={{ opacity: 0, scale: 0.9, y: 50 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative hidden lg:block"
-        >
-          <div className="relative z-10 rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
-            <img 
-              src="https://picsum.photos/seed/agency-new/800/1000" 
-              alt="Fusion Media Agency" 
-              className="w-full h-auto"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent" />
-          </div>
-          
-          {/* Floating Elements with smooth floating loop and hover activation */}
+        {/* Clean, Professional 2D Graphic Representation Column */}
+        <div className="lg:col-span-5 relative flex items-center justify-center">
           <motion.div 
-            animate={{ y: [0, -10, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            whileHover={{ scale: 1.05, boxShadow: "0 15px 30px rgba(91,196,168,0.25)" }}
-            className="glass-card p-4 absolute -top-6 -right-6 z-20 cursor-pointer"
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 1, ease: "easeOut" }}
+            className="w-full max-w-md bg-[#0D1527]/80 border border-white/10 rounded-2xl shadow-2xl p-6 relative"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-brand-primary/20 rounded-full flex items-center justify-center text-brand-primary">
-                <Zap size={20} />
+            {/* Visual representation card */}
+            <div className="space-y-6">
+              <div className="flex justify-between items-center border-b border-white/5 pb-4">
+                <div>
+                  <span className="text-[10px] font-mono text-brand-primary uppercase tracking-widest font-bold">REPRESENTATION</span>
+                  <h3 className="text-lg font-bold text-white mt-1">Our Focus Verticals</h3>
+                </div>
+                <div className="px-2.5 py-1 rounded bg-brand-primary/10 text-brand-primary text-xs font-mono font-bold">
+                  Active Talents
+                </div>
               </div>
-              <div>
-                <div className="text-xs text-gray-400">Our Vibe</div>
-                <div className="text-lg font-bold">Fresh & Bold</div>
+
+              {/* Niches lists with elegant clean icons and 2D bars */}
+              <div className="space-y-4">
+                <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl hover:border-brand-primary/30 transition-all duration-300">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center text-blue-400">
+                        <Video size={16} />
+                      </div>
+                      <span className="text-sm font-bold text-white">Tech & Lifestyle Creators</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400">Cinematic reviews, hardware analysis, and daily lifestyle integration.</p>
+                </div>
+
+                <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl hover:border-brand-primary/30 transition-all duration-300">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center text-red-400">
+                        <Youtube size={16} />
+                      </div>
+                      <span className="text-sm font-bold text-white">Gaming & Live Streamers</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400">Engaging gameplays, custom esports activations, and authentic streams.</p>
+                </div>
+
+                <div className="bg-white/[0.02] border border-white/5 p-4 rounded-xl hover:border-brand-primary/30 transition-all duration-300">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-pink-500/10 flex items-center justify-center text-pink-400">
+                        <Instagram size={16} />
+                      </div>
+                      <span className="text-sm font-bold text-white">Social Media & Fashion</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-400">Aesthetic visual layouts, product styling, and high-engagement reels.</p>
+                </div>
               </div>
             </div>
           </motion.div>
-
-          <motion.div 
-            animate={{ y: [0, 10, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            whileHover={{ scale: 1.05, boxShadow: "0 15px 30px rgba(59,130,246,0.25)" }}
-            className="glass-card p-4 absolute bottom-12 -left-12 z-20 cursor-pointer"
-          >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center text-blue-500">
-                <Users size={20} />
-              </div>
-              <div>
-                <div className="text-xs text-gray-400">Focus</div>
-                <div className="text-lg font-bold">Creator First</div>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -305,237 +294,212 @@ const Hero = () => {
 const Services = () => {
   const services = [
     {
-      icon: <Users className="text-brand-primary" />,
-      title: "Creator Onboarding",
-      desc: "We help creators find their niche and connect them with brands that align with their values."
+      icon: <Users className="text-brand-primary" size={24} />,
+      title: "Creator Management",
+      desc: "Providing professional representation for growing creators. We structure collaborations, handle contract negotiation, and support content growth."
     },
     {
-      icon: <Zap className="text-brand-primary" />,
-      title: "Growth Strategy",
-      desc: "New agency, fresh ideas. We provide innovative strategies to help you stand out in a crowded market."
+      icon: <TrendingUp className="text-brand-primary" size={24} />,
+      title: "Campaign Execution",
+      desc: "End-to-end management from concept ideation to delivery. We ensure creators align with your brand requirements seamlessly."
     },
     {
-      icon: <BarChart3 className="text-brand-primary" />,
-      title: "Brand Partnerships",
-      desc: "We bridge the gap between emerging creators and forward-thinking brands looking for authenticity."
+      icon: <BarChart3 className="text-brand-primary" size={24} />,
+      title: "Performance Review",
+      desc: "Clear performance insights for brands. We track delivery, audience engagement, and campaign outcomes with complete transparency."
     }
   ];
 
-  const headerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" }
-    }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15
-      }
-    }
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { type: "spring", stiffness: 80, damping: 15 }
-    }
-  };
-
   return (
-    <section id="services" className="py-24 bg-white/[0.02] overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div 
-          className="text-center mb-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={headerVariants}
-        >
-          <span className="text-brand-primary font-mono text-sm uppercase tracking-widest mb-4 block">What We Do</span>
-          <h3 className="text-4xl md:text-5xl font-bold">Our Vision for the Future</h3>
-        </motion.div>
+    <section id="services" className="py-28 bg-[#090D1A] relative border-t border-white/5">
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        <div className="text-center mb-20">
+          <span className="text-brand-primary font-mono text-xs uppercase tracking-widest bg-brand-primary/10 border border-brand-primary/20 px-3 py-1 rounded-full inline-block mb-4">
+            Bespoke Services
+          </span>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Professional Media Representation
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto text-base">
+            We provide structured systems to ensure both creators and partner brands enjoy a transparent, streamlined collaboration journey.
+          </p>
+        </div>
 
-        <motion.div 
-          className="grid md:grid-cols-3 gap-8"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          variants={containerVariants}
-        >
+        <div className="grid md:grid-cols-3 gap-8">
           {services.map((s, i) => (
-            <motion.div
+            <div 
               key={i}
-              variants={cardVariants}
-              whileHover={{ 
-                y: -10, 
-                scale: 1.03,
-                borderColor: "rgba(91, 196, 168, 0.4)",
-                boxShadow: "0 20px 40px -15px rgba(91, 196, 168, 0.15)"
-              }}
-              className="glass-card p-8 border border-white/10 transition-all duration-300"
+              className="glass-card p-8 border border-white/10 hover:border-brand-primary/30 hover:bg-[#0E1629] transition-all duration-300 flex flex-col group cursor-pointer"
             >
-              <motion.div 
-                whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
-                className="w-14 h-14 bg-brand-primary/10 rounded-xl flex items-center justify-center mb-6 cursor-pointer"
-              >
+              <div className="w-12 h-12 bg-brand-primary/10 rounded-xl flex items-center justify-center mb-6 border border-brand-primary/15 group-hover:bg-brand-primary group-hover:text-brand-dark transition-all duration-300">
                 {s.icon}
-              </motion.div>
-              <h4 className="text-xl font-bold mb-4">{s.title}</h4>
-              <p className="text-gray-400 leading-relaxed">
+              </div>
+              <h3 className="text-xl font-bold text-white mb-3">{s.title}</h3>
+              <p className="text-gray-400 text-sm leading-relaxed">
                 {s.desc}
               </p>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 };
 
 const CreatorOnboarding = () => {
-  const headerVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" }
-    }
-  };
-
-  const formVariants = {
-    hidden: { opacity: 0, y: 60, scale: 0.96 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      scale: 1,
-      transition: { duration: 1, ease: [0.16, 1, 0.3, 1] }
-    }
-  };
-
   return (
-    <section id="creators" className="py-24 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6">
-        <motion.div 
-          className="text-center mb-16"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={headerVariants}
-        >
-          <span className="text-brand-primary font-mono text-sm uppercase tracking-widest mb-4 block">Join Us</span>
-          <h3 className="text-4xl md:text-5xl font-bold mb-6">Creator Onboarding</h3>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Are you a creator looking to take your journey to the next level? Fill out the form below and let's build something amazing together.
+    <section id="creators" className="py-28 overflow-hidden grid-pattern relative border-t border-white/5">
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0A0F1D] via-transparent to-[#080C17] pointer-events-none" />
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+        
+        <div className="text-center mb-16">
+          <span className="text-brand-primary font-mono text-xs uppercase tracking-widest bg-brand-primary/10 border border-brand-primary/20 px-3 py-1 rounded-full inline-block mb-4">
+            Onboarding
+          </span>
+          <h2 className="text-3xl md:text-5xl font-black tracking-tight text-white mb-4">
+            Creator Application
+          </h2>
+          <p className="text-gray-400 max-w-2xl mx-auto text-base">
+            Ready to collaborate with premium brands? Fill out our official, confidential creator onboarding application below to register your profile.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.div 
-          className="glass-card overflow-hidden max-w-4xl mx-auto shadow-2xl border border-white/10"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.15 }}
-          variants={formVariants}
-        >
-          <div className="w-full bg-white/5 p-2 flex items-center justify-between border-b border-white/10">
-            <div className="flex gap-2 ml-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/50" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-              <div className="w-3 h-3 rounded-full bg-green-500/50" />
+        {/* Polished, clean Form Container */}
+        <div className="glass-card overflow-hidden max-w-4xl mx-auto shadow-2xl border border-white/10">
+          {/* Top Window Bar */}
+          <div className="w-full bg-[#080C16] p-4 flex items-center justify-between border-b border-white/10">
+            <div className="flex gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-500/80" />
+              <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+              <div className="w-3 h-3 rounded-full bg-green-500/80" />
             </div>
-            <div className="text-xs text-gray-500 font-mono">fusionmedia_onboarding_form.v1</div>
+            <div className="text-xs text-gray-400 font-mono flex items-center gap-2">
+              <span>onboarding_form.pdf</span>
+            </div>
             <div className="w-10" />
           </div>
-          <div className="relative w-full" style={{ height: '800px' }}>
+
+          <div className="relative w-full" style={{ height: '750px' }}>
             <iframe 
               src="https://docs.google.com/forms/d/e/1FAIpQLSez0CbTBXxFbiblzSzJb6HiHV4KFd8FxMx2yG8dafgThN_HgQ/viewform?embedded=true" 
-              className="absolute inset-0 w-full h-full border-0"
+              className="absolute inset-0 w-full h-full border-0 bg-white"
               title="Creator Onboarding Form"
             >
               Loading…
             </iframe>
           </div>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
 };
 
 const Contact = () => {
-  const textVariants = {
-    hidden: { opacity: 0, y: 35 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" }
-    }
-  };
+  return (
+    <section id="contact" className="py-28 bg-[#080D1A] relative overflow-hidden border-t border-white/5">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-brand-primary/5 rounded-full blur-3xl pointer-events-none" />
+      
+      <div className="max-w-4xl mx-auto px-6 text-center relative z-10">
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-brand-primary/10 border border-brand-primary/20 text-brand-primary text-xs font-bold uppercase tracking-wider mb-8">
+          <Mail size={14} />
+          <span>Brand Inquiry</span>
+        </div>
+        
+        <h2 className="text-4xl md:text-6xl font-black mb-6 tracking-tight text-white">Let's <span className="text-brand-primary">Collaborate</span></h2>
+        
+        <p className="text-lg text-gray-400 mb-12 max-w-xl mx-auto">
+          We help brands discover and partner with the right social talent. Get in touch directly via email to request a curated roster or design a campaign.
+        </p>
+        
+        <div className="glass-card p-8 sm:p-12 flex flex-col items-center shadow-xl max-w-2xl mx-auto border border-white/10 bg-[#0C1427]/50 relative">
+          <div className="w-12 h-12 bg-brand-primary/10 rounded-xl flex items-center justify-center text-brand-primary mb-6 border border-brand-primary/20">
+            <Mail size={24} />
+          </div>
+          
+          <div className="text-lg sm:text-2xl font-black mb-2 text-white select-all font-mono break-all px-2 border-b border-brand-primary/20 pb-2">
+            Connect@fusionmediaofficial.co.in
+          </div>
+          
+          <p className="text-gray-400 text-sm mb-8">Our team responds directly with campaign proposal details.</p>
+          
+          <button 
+            onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
+            className="btn-primary px-10 py-3.5 uppercase tracking-wider text-xs font-bold w-full sm:w-auto"
+          >
+            <span>Send Email Inquiry</span>
+            <ArrowRight size={14} />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      scale: 1,
-      transition: { type: "spring", stiffness: 80, damping: 15 }
+const FAQ = () => {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const faqs = [
+    {
+      q: "How does Fusion Media identify the right creator matches?",
+      a: "We analyze a creator's audience location, active engagement, and content relevance. Rather than looking solely at subscriber count, we focus on genuine connections between creators and the brand's target demography."
+    },
+    {
+      q: "What is required for creators to join the network?",
+      a: "We welcome active, genuine creators with a consistent uploading schedule, highly engaged regional followers in India, and clean content aesthetics."
+    },
+    {
+      q: "Are there any upfront or platform registration fees?",
+      a: "No. We do not charge any upfront sign-up fees or platform retainers for creators to join or submit their onboard request form."
     }
-  };
+  ];
 
   return (
-    <section id="contact" className="py-24 bg-brand-primary/5 overflow-hidden">
-      <div className="max-w-4xl mx-auto px-6 text-center">
-        <motion.div 
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={textVariants}
-        >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand-primary/10 text-brand-primary text-sm font-medium mb-8">
-            <Mail size={16} />
-            <span>For Brands & Businesses</span>
-          </div>
-          <h2 className="text-4xl md:text-6xl font-bold mb-8">Let's <span className="text-brand-primary">Collaborate</span></h2>
-          <p className="text-xl text-gray-400 mb-12">
-            We are currently looking for visionary brands to partner with our growing creator network. Reach out to us directly via email for campaign inquiries.
-          </p>
-        </motion.div>
-        
-        <motion.div 
-          className="glass-card p-12 flex flex-col items-center shadow-2xl relative overflow-hidden"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          variants={cardVariants}
-        >
-          {/* Subtle background glow bubbles */}
-          <div className="absolute -top-12 -left-12 w-48 h-48 bg-brand-primary/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
-
-          <motion.div 
-            whileHover={{ scale: 1.1, rotate: [0, -10, 10, 0] }}
-            className="w-20 h-20 bg-brand-primary/20 rounded-full flex items-center justify-center text-brand-primary mb-6 cursor-pointer relative z-10"
-          >
-            <Mail size={40} />
-          </motion.div>
-          <div className="text-xl sm:text-2xl font-bold mb-2 break-all px-2 relative z-10 select-all">{`Connect@fusionmediaofficial.co.in`}</div>
-          <p className="text-gray-400 mb-8 relative z-10">Our team typically responds within 24 hours.</p>
-          <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.location.href = 'mailto:Connect@fusionmediaofficial.co.in'}
-            className="btn-primary flex items-center gap-2 px-12 relative z-10 cursor-pointer"
-          >
-            Send an Email <ArrowRight size={18} />
-          </motion.button>
-        </motion.div>
+    <section className="py-24 bg-[#090D1A] border-t border-white/5 relative">
+      <div className="max-w-3xl mx-auto px-6 relative z-10">
+        <div className="text-center mb-12">
+          <span className="text-brand-primary font-mono text-xs uppercase tracking-widest bg-brand-primary/10 border border-brand-primary/20 px-3 py-1 rounded-full inline-block mb-3">
+            FAQs
+          </span>
+          <h3 className="text-2xl md:text-3xl font-black text-white">Common Questions</h3>
+        </div>
+        <div className="space-y-4">
+          {faqs.map((faq, i) => (
+            <div 
+              key={i}
+              className="bg-white/[0.02] border border-white/10 rounded-xl overflow-hidden transition-colors"
+            >
+              <button 
+                onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                className="w-full p-5 text-left flex justify-between items-center text-white hover:text-brand-primary transition-all font-bold text-sm sm:text-base cursor-pointer"
+              >
+                <span>{faq.q}</span>
+                <motion.div
+                  animate={{ rotate: openIndex === i ? 180 : 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-gray-400"
+                >
+                  <ChevronDown size={18} />
+                </motion.div>
+              </button>
+              
+              <AnimatePresence initial={false}>
+                {openIndex === i && (
+                  <motion.div 
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden border-t border-white/5 bg-white/[0.01]"
+                  >
+                    <p className="p-5 text-xs sm:text-sm text-gray-400 leading-relaxed">
+                      {faq.a}
+                    </p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -543,30 +507,57 @@ const Contact = () => {
 
 const Footer = () => {
   return (
-    <footer className="py-12 border-t border-white/10">
+    <footer className="py-16 bg-[#0A0F1D] border-t border-white/10 relative z-10">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex flex-col items-center md:items-start gap-4">
-          <Link to="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-3">
             <img 
               src="https://lh3.googleusercontent.com/d/1P4npnJEsEdOa9WHxj4bsyN6BTjf-es-F" 
               alt="Fusion Media Logo" 
               className="w-8 h-8 object-contain"
               referrerPolicy="no-referrer"
             />
-            <span className="text-xl font-bold tracking-tighter">FUSION MEDIA</span>
+            <span className="text-lg font-black tracking-wider">FUSION <span className="text-brand-primary font-medium">MEDIA</span></span>
           </Link>
-          <p className="text-sm text-gray-500 max-w-xs text-center md:text-left">
-            Empowering the next generation of creators. Fresh ideas, authentic connections.
+          <p className="text-sm text-gray-500 max-w-xs text-center md:text-left leading-relaxed">
+            Empowering professional creators and building impactful brand partnerships across India.
           </p>
         </div>
         
         <div className="flex flex-col items-center md:items-end gap-6">
-          <div className="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-4 text-sm text-gray-400">
-            <a href="/#services" className="hover:text-brand-primary">Services</a>
-            <a href="/#creators" className="hover:text-brand-primary">Creators</a>
-            <a href="/#contact" className="hover:text-brand-primary">Brands</a>
-            <Link to="/terms" className="hover:text-brand-primary">Terms & Conditions</Link>
-            <Link to="/privacy" className="hover:text-brand-primary">Privacy Policy</Link>
+          <div className="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-4 text-sm text-gray-400 font-semibold">
+            <a 
+              href="/#services" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('services')?.scrollIntoView({ behavior: 'smooth' });
+              }} 
+              className="hover:text-brand-primary transition-colors"
+            >
+              Services
+            </a>
+            <a 
+              href="/#creators" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('creators')?.scrollIntoView({ behavior: 'smooth' });
+              }} 
+              className="hover:text-brand-primary transition-colors"
+            >
+              Creators
+            </a>
+            <a 
+              href="/#contact" 
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+              }} 
+              className="hover:text-brand-primary transition-colors"
+            >
+              Brands
+            </a>
+            <Link to="/terms" className="hover:text-brand-primary transition-colors">Terms & Conditions</Link>
+            <Link to="/privacy" className="hover:text-brand-primary transition-colors">Privacy Policy</Link>
           </div>
 
           <div className="flex gap-4">
@@ -574,25 +565,19 @@ const Footer = () => {
               href="https://www.instagram.com/fusionmedia.services" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-primary hover:text-brand-dark transition-all cursor-pointer"
+              className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-brand-dark transition-all cursor-pointer text-gray-300"
             >
               <Instagram size={18} />
             </a>
-            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-primary hover:text-brand-dark transition-all cursor-pointer">
-              <Twitter size={18} />
-            </div>
-            <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-brand-primary hover:text-brand-dark transition-all cursor-pointer">
-              <Youtube size={18} />
-            </div>
           </div>
           
-          <div className="text-sm text-gray-500">
-            Connect@fusionmediaofficial.co.in
+          <div className="text-xs text-gray-500 font-mono">
+            Direct Contact: Connect@fusionmediaofficial.co.in
           </div>
         </div>
       </div>
       <div className="text-center mt-12 pt-8 border-t border-white/5 text-xs text-gray-600">
-        © {new Date().getFullYear()} Fusion Media Agency. All rights reserved.
+        © {new Date().getFullYear()} Fusion Media Agency. Registered in India. All rights reserved.
       </div>
     </footer>
   );
@@ -604,6 +589,7 @@ const Home = () => {
       <Hero />
       <Services />
       <CreatorOnboarding />
+      <FAQ />
       <Contact />
     </>
   );
@@ -612,7 +598,7 @@ const Home = () => {
 export default function App() {
   return (
     <Router>
-      <div className="min-h-screen selection:bg-brand-primary selection:text-brand-dark">
+      <div className="min-h-screen bg-[#0A0F1D] text-white">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
